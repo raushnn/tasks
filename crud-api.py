@@ -7,7 +7,6 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:root@localhost/test"
 db = SQLAlchemy(app)
 
-
 class Income(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name= db.Column(db.String(100), nullable= False)
