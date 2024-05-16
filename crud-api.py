@@ -15,10 +15,14 @@ class Income(db.Model):
 @app.route("/incomes", methods=["POST"])
 def create_income():
     data = request.json
-    income = Income(amount=data["amount"], name=data["name"])
-    db.session.add(income)
-    db.session.commit()
-    return jsonify({"id": income.id}), 201
+    income = Income(id= data["id"], amount=data["amount"], name=data["name"])
+    if Income.query.get(data["id"]) is None:
+        db.session.add(income)
+        db.session.commit()
+        return jsonify({"id": income.id}), 201
+    else:
+        return jsonify({"error": "ID already present in the table"}), 200
+    
 
 @app.route("/incomes/<int:id>", methods=["GET"])
 def get_income_by_id(id):
@@ -37,7 +41,6 @@ def get_all_incomes():
             writer.writerow([income.id, income.name, income.amount])
             
     return jsonify({"message": "CSV file generated successfully"}), 200
-
 @app.route("/incomes/<int:id>", methods=["PUT"])
 def update_income(id):
     income = Income.query.get(id)
